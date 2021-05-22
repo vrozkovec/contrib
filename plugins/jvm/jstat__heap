@@ -99,7 +99,7 @@ print_config() {
 
 
 print_stats() {
-    local pid_num="$1"
+    local logfile="$1"
     local awk_script
     if [ "${JDK_TYPE}" = "bea" ]; then
         # shellcheck disable=SC2016
@@ -142,7 +142,7 @@ print_stats() {
                 print "Permanent_Free.value " MF * 1024;
             }'
     fi
-    cat "$jstatlogfile" | awk "$awk_script"
+    cat "$logfile" | awk "$awk_script"
 }
 
 
@@ -171,4 +171,4 @@ if [ "$1" = "config" ]; then
     print_config
 fi
 
-print_stats "$(cat "$pidfilepath")"
+print_stats "$jstatlogfile"
