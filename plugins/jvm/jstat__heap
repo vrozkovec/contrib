@@ -34,7 +34,7 @@
 #
 # Config variables:
 #
-#       pidfilepath  - Which file path use. Defaults to '/var/run/jsvc.pid'
+#       jstatlogfilepath (required) - File that contains output of jstat of the program we want to monitor
 #       javahome     - override automatic detection of JRE directory
 #       graphtitle   - Title of the graph (defaults to PID file location)
 #
@@ -42,8 +42,8 @@
 default_java_home=/usr/lib/jvm/default-java
 [ -e "$default_java_home" ] || default_java_home=/usr/local/java/jdk
 
-pidfilepath=${pidfilepath:-/var/run/jsvc.pid}
-graphtitle=${graphtitle:-$pidfilepath}
+jstatlogfile=${jstatlogfilepath}
+graphtitle=${graphtitle:-$jstatlogfilepath}
 JAVA_HOME=${javahome:-$default_java_home}
 
 export JAVA_HOME
@@ -142,7 +142,7 @@ print_stats() {
                 print "Permanent_Free.value " MF * 1024;
             }'
     fi
-    "${JAVA_HOME}/bin/jstat" -gc "$pid_num" | awk "$awk_script"
+    cat "$jstatlogfile" | awk "$awk_script"
 }
 
 
